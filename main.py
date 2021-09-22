@@ -4,7 +4,6 @@ import buttonlist
 
 
 
-# preset conditions
 print("""
                             [CONNECT 5]
 [How To Play]: Just like the title, you need to 'Connect 5' linear dots
