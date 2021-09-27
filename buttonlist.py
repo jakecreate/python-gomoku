@@ -1,7 +1,7 @@
 from graphics import *
 from game import Button
 
-def getStart(winSize):
+def forefeit(winSize):
     s_button = Button(Point(winSize/2 - 100, winSize/2 - 100), Point(winSize/2 + 100, winSize/2 + 100))
     s_button.setOutline("white")
     s_button.setFill("white")

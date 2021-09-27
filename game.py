@@ -2,13 +2,16 @@ from graphics import *
 
 class Round():
 
-    def __init__(self, window, difficulty):
+    def __init__(self, window, winSize, difficulty):
+        # get window object
         self.win = window
 
+        # set size of window
+        self.winSize = winSize
         # set difficulty for distribution
         mode = {'easy' : 20, 'medium' : 10, 'hard' : 8, 'test' : 2}
         self.distribution = mode[difficulty.lower()]
-        self.spacing = self.win.getWidth()/self.distribution
+        self.spacing = self.winSize/self.distribution
 
         # related to lines
         self.lineList = self.__generateLines()
@@ -23,18 +26,18 @@ class Round():
         self.currentColumnIndex = 0
         self.currentPlayerId = 0
 
-    # generate
+    # generate line
     def __generateLines(self):
         li = []
 
         for x in range(self.distribution - 1):
             # get horizontal line end points
             hPoint1 = Point(self.spacing, self.spacing * (x + 1))
-            hPoint2 = Point(self.win.getWidth() - self.spacing, self.spacing * (x + 1))
+            hPoint2 = Point(self.winSize - self.spacing, self.spacing * (x + 1))
             
             # get vertical line end points
             vPoint1 = Point(self.spacing * (x + 1), self.spacing)
-            vPoint2 = Point(self.spacing * (x + 1), self.win.getWidth() - self.spacing)
+            vPoint2 = Point(self.spacing * (x + 1), self.winSize - self.spacing)
 
             # create line
             hLine = Line(hPoint1, hPoint2)
@@ -66,7 +69,7 @@ class Round():
         
         return li
     
-
+    # draw lines
     def drawLines(self):   
         for x in range((self.distribution - 1)*2):
             self.lineList[x].draw(self.win)
@@ -79,7 +82,7 @@ class Round():
             if abs(i.getX() - xCord) < abs(self.slotList[0][column].getX() - xCord):
                 column = self.slotList[0].index(i)
         
-        closetYDistance = self.win.getWidth()
+        closetYDistance = self.winSize
         chosenSlot = None
         row = 0
 
@@ -312,7 +315,6 @@ class Round():
     def end(self): self.running = False
     
 
-
 class Player():
 
     def __init__(self, playerId, color):
@@ -324,6 +326,7 @@ class Player():
 
 
     def getId(self): return self.playerId
+
 
 class Slot():
 
@@ -358,7 +361,8 @@ class Slot():
 
     # linking the Circle object to the specfied Slot object
     def addDotToSlot(self, dot): self.dot = dot
-    
+
+   
 class Button():
 
     def __init__(self, p1, p2):
