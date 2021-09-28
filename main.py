@@ -1,6 +1,9 @@
-from game import *
-from graphics import *
-import buttonlist
+from package.graphics import *
+from package.game import *
+
+#  from game import *
+# from graphics import *
+# import buttonlist
 
 # [Difficulty] --> [EASY](19x19) - [MEDIUM](9x9) - [HARD](7x7)
 # options for difficulty input = "easy" - "medium" - "hard" [Capitalization does not matter]

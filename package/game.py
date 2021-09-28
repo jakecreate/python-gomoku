@@ -1,4 +1,4 @@
-from graphics import *
+from package.graphics import *
 
 class Round():
 
@@ -125,9 +125,9 @@ class Round():
 
         def changeColor(listOfSlots):
             if slot.getId() == 1:
-                color = "black"
-            else:
                 color = "white"
+            else:
+                color = "black"
 
             for i in listOfSlots:
                 dot = i.getDot()
