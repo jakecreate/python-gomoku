@@ -1,4 +1,4 @@
-from package.graphics import *
+from modules.graphics import *
 
 class Round():
 

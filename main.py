@@ -1,5 +1,5 @@
-from package.graphics import *
-from package.game import *
+from modules.graphics import *
+from modules.game import *
 
 #  from game import *
 # from graphics import *
