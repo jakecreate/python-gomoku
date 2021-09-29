@@ -1,32 +1,26 @@
 from modules.graphics import *
 from modules.game import *
-
-#  from game import *
-# from graphics import *
-# import buttonlist
-
+from modules.gui import *
 # [Difficulty] --> [EASY](19x19) - [MEDIUM](9x9) - [HARD](7x7)
 # options for difficulty input = "easy" - "medium" - "hard" [Capitalization does not matter]
 difficulty = 'easy'
-
-# window size
+# window     -- size (range from 250 to 900) --
 winSize = 750
-column_width = winSize/5
-
+gui_width = winSize/5
 # colors
 window_color = color_rgb(247,215,157)
-column_color =color_rgb(64,62,58) 
+column_color =color_rgb(58,61,67) 
 p1_color = color_rgb(64,62,58) # black
 p2_color = color_rgb(246, 242, 235) # white
-
 # window setup
-win = GraphWin(title='Connect 5', width=winSize, height=winSize)
+win = GraphWin(title='Connect 5', width=winSize + gui_width, height=winSize)
 win.setBackground(window_color)                                                            
-
 # players
 player1 = Player(1, p1_color)
 player2 = Player(2, p2_color)
-
+# gui setup
+gui = Gui(win, gui_width, column_color)
+gui.drawComponents()
 # game setup
 round = Round(win, winSize, difficulty)
 round.drawLines()
@@ -35,17 +29,14 @@ players = [player1, player2]
 
 # round
 while round.isRunning():
-
     # find player
     player = players[round.getTurns() % 2]
     print(f"[Turn#{round.getTurns() + 1}] Player#{players.index(player) + 1}'s turn! [{player.getColor()}]")
     print()
-
     # get mouse coords
     mouse = win.getMouse()
     xCord = mouse.getX()
     yCord = mouse.getY()
-
     # check if mouse in on board
     if xCord < winSize:
         # find slot
@@ -55,7 +46,6 @@ while round.isRunning():
             print("occupied")
             
         else:
-            
             # draw dot on a specific slot
             dot = Circle(Point(slot.getX(), slot.getY()), dotRadius) 
             dot.setOutline(player.getColor())
@@ -66,17 +56,17 @@ while round.isRunning():
             dot.draw(win)
             
             round.nextTurn()
-
         # has five connected
         if round.hasFiveConnected(slot):
             print(f"Player#{player.getId()} Wins! Click anywhere to END")
             round.end()
-            
         # if full
         if round.isFull():
             round.end()
     else:
         # have a set of buttons
+        if gui.forefeit_button.ifPressed(mouse):
+            break
         # if conds of buttons
         pass
 
