@@ -1,16 +1,17 @@
 from tkinter.constants import RIGHT
 from modules.graphics import *
 from modules.game import *
-class Gui():
+class Column():
 
     def __init__(self, winObj, column_width, column_color):
         self.win = winObj
         self.column_width = column_width
-        # self.columnBlock = self.__gen_column_block()   
         self.column_color = column_color
+
+
         self.numTurns = 0
         self.forefeit_button = self.__gen_forefeit_button()
-       
+        self.counterDisplay = None
         
        
 
@@ -42,6 +43,11 @@ class Gui():
         column_block.draw(self.win)
         self.forefeit_button.draw(self.win)
 
+    def __gen_display_counter(self):
+        pass
+
+    def getForefitButton(self):
+        return self.forefeit_button
  
         
 

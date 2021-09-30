@@ -145,7 +145,7 @@ class Round():
             if self.currentColumnIndex + i < len(row):
                 nextSlot = row[self.currentColumnIndex + i]
 
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -164,7 +164,7 @@ class Round():
             if self.currentColumnIndex - i >= 0:
                 nextSlot = row[self.currentColumnIndex - i]
 
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -188,7 +188,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex - i]
                 nextSlot = row[self.currentColumnIndex]
 
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -208,7 +208,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex + i]
                 nextSlot = row[self.currentColumnIndex]
         
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -232,7 +232,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex - i]
                 nextSlot = row[self.currentColumnIndex + i]
         
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -252,7 +252,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex + i]
                 nextSlot = row[self.currentColumnIndex - i]
         
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -276,7 +276,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex - i]
                 nextSlot = row[self.currentColumnIndex - i]
         
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:
@@ -296,7 +296,7 @@ class Round():
                 row = self.slotList[self.currentRowIndex + i]
                 nextSlot = row[self.currentColumnIndex + i]
         
-                if nextSlot.getId() == slot.getId():
+                if nextSlot.getId() == slot.getId() and numConnected < 4:
                     slotsConnected.append(nextSlot)
                     numConnected+=1
                 else:

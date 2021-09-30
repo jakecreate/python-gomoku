@@ -1,26 +1,28 @@
 from modules.graphics import *
 from modules.game import *
 from modules.gui import *
-# [Difficulty] --> [EASY](19x19) - [MEDIUM](9x9) - [HARD](7x7)
-# options for difficulty input = "easy" - "medium" - "hard" [Capitalization does not matter]
-difficulty = 'easy'
-# window     -- size (range from 250 to 900) --
-winSize = 750
+
+# conditions
+difficulty = 'easy' # options for difficulty input = "easy"(19x19) - "medium"(9x9) - "hard"(7x7) [Capitalization does not matter] 
+winSize = 750 # window -- size range from 250 to 900 --
 gui_width = winSize/5
-# colors
 window_color = color_rgb(247,215,157)
 column_color =color_rgb(58,61,67) 
 p1_color = color_rgb(64,62,58) # black
 p2_color = color_rgb(246, 242, 235) # white
+
 # window setup
 win = GraphWin(title='Connect 5', width=winSize + gui_width, height=winSize)
-win.setBackground(window_color)                                                            
+win.setBackground(window_color)   
+
 # players
 player1 = Player(1, p1_color)
 player2 = Player(2, p2_color)
+
 # gui setup
-gui = Gui(win, gui_width, column_color)
+gui = Column(win, gui_width, column_color)
 gui.drawComponents()
+
 # game setup
 round = Round(win, winSize, difficulty)
 round.drawLines()
@@ -65,7 +67,7 @@ while round.isRunning():
             round.end()
     else:
         # have a set of buttons
-        if gui.forefeit_button.ifPressed(mouse):
+        if gui.getForefitButton().ifPressed(mouse):
             break
         # if conds of buttons
         pass
