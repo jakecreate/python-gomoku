@@ -58,6 +58,7 @@ while round.isRunning():
             dot.draw(win)
             
             round.nextTurn()
+            gui.update_num_turns_display(round.getTurns())
         # has five connected
         if round.hasFiveConnected(slot):
             print(f"Player#{player.getId()} Wins! Click anywhere to END")
