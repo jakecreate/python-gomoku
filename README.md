@@ -1,4 +1,2 @@
-# OhMok
-The original name of this game is called 오목, a Korean board game. The motive of this board game is to connect 5 beads together in a linear line (whether it is horizontal, vertical, or diagonal). The game consists of only 2 players trying to outcomepete eachother to connect 5 beads first.
-
-This simple korean board game gave me a project idea to simulate the board game using a python graphics module. This project was for me to also practice implementing classes into my code (game.py is where i did all of that).
+# Gomoku
+Gomoku, also called Five in a Row, is an abstract strategy board game. It is traditionally played with Go pieces (black and white stones) on a Go board. It is played using a 15×15 board while in the past a 19×19 board was standard.Because pieces are typically not moved or removed from the board, gomoku may also be played as a paper-and-pencil game. The game is known in several countries under different names.
