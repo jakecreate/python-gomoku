@@ -1,5 +1,6 @@
 from modules.graphics import *
 from modules.game import *
+import time
 class Column():
 
     def __init__(self, winObj, column_width, column_color):
@@ -7,12 +8,11 @@ class Column():
         self.column_width = column_width
         self.column_color = column_color
 
-        self.forefeit_button = self.__gen_forefeit_button()
+        self.column_block = self.__gen_column_block()
         self.num_turns_display = self.__gen_num_turns_display(0)
-        
+        self.forefeit_button = self.__gen_forefeit_button()
         self.turn_display = None
         
-       
 
     def __gen_forefeit_button(self):
         color = color_rgb(231, 108, 108)
@@ -32,16 +32,14 @@ class Column():
 
         return button
 
-    # def __gen_column_block(self):
-    #     rec = Rectangle(Point(self.win.getWidth()))   
-    def drawComponents(self):
+    # generate
+    def __gen_column_block(self):
         column_block = Rectangle(Point(self.win.getHeight(), 0), Point(self.win.getWidth(), self.win.getHeight()))
         column_block.setFill(self.column_color)
         column_block.setOutline(self.column_color)
-        
-        column_block.draw(self.win)
-        self.forefeit_button.draw(self.win)
-        self.num_turns_display.draw(self.win)
+
+        return column_block
+   
 
     def __gen_num_turns_display(self, numTurns):
         
@@ -66,20 +64,21 @@ class Column():
 
         return box
 
+    # actions
     def update_num_turns_display(self, numTurns):
-        box = self.__gen_num_turns_display(numTurns)
-
-        
+        box = self.__gen_num_turns_display(numTurns)        
         box.draw(self.win)
+        
         self.num_turns_display.undraw()
         self.num_turns_display = box
+    
+
+    def drawComponents(self):
+        self.column_block.draw(self.win)
+        self.forefeit_button.draw(self.win)
+        self.num_turns_display.draw(self.win)
         
-        
-
-
-
-
-
+    # get
     def getForefitButton(self):
         return self.forefeit_button
  
