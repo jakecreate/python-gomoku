@@ -59,10 +59,8 @@ class Round():
 
         for i in range(self.distribution - 1):
             row = []
-
             for j in range(self.distribution - 1):
                 x = Slot(self.spacing*(j + 1), self.spacing*(i + 1))
-
                 row.append(x)
 
             li.append(row)

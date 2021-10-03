@@ -45,22 +45,24 @@ class Column():
 
     def __gen_num_turns_display(self, numTurns):
         
-        color = color_rgb(231, 108, 108)
+        box_color = color_rgb(41, 44, 48)
+        text_color = 'white'
         spacing = self.column_width/16
+        
 
         x1_disp = self.win.getWidth() - self.column_width + spacing
         y1_disp = spacing
 
-        x2_disp = self.win.getWidth() - self.column_width/2 - spacing
+        x2_disp = self.win.getWidth() - spacing
         y2_disp = self.win.getHeight()/12 - spacing
 
         box = TextBox(Point(x1_disp, y1_disp), Point(x2_disp, y2_disp))
-        box.setOutline('white')
-        box.setFill(color_rgb(41, 44, 48))
+        box.setOutline(box_color)
+        box.setFill(box_color)
         
-        box.setText(str(numTurns))
+        box.setText("Turn : " + str(numTurns))
         box.setTextSize(int(self.column_width/8))
-        box.setTextColor('white')
+        box.setTextColor(text_color)
 
         return box
 
