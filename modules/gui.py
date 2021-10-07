@@ -11,7 +11,7 @@ class Column():
         self.column_block = self.__gen_column_block()
         self.num_turns_display = self.__gen_num_turns_display(0)
         self.forefeit_button = self.__gen_forefeit_button()
-        self.turn_display = None
+        self.turn_display = self.__gen_turn_display("black")
         
 
     def __gen_forefeit_button(self):
@@ -58,8 +58,34 @@ class Column():
         box.setOutline(box_color)
         box.setFill(box_color)
         
-        box.setText("Turn : " + str(numTurns))
+        box.setText("Move : " + str(numTurns))
         box.setTextSize(int(self.column_width/8))
+        box.setTextColor(text_color)
+
+        return box
+    
+    def __gen_turn_display(self, turnColor):
+        
+        box_color = turnColor
+        text_color = "black"
+        if turnColor == "black":
+            text_color = "white"
+       
+        spacing = self.column_width/16
+        
+
+        x1_disp = self.win.getWidth() - self.column_width/2 + spacing
+        y1_disp = self.win.getHeight()/12
+
+        x2_disp = self.win.getWidth() - spacing
+        y2_disp = (self.win.getHeight()/12)*2 - spacing*2
+
+        box = TextBox(Point(x1_disp, y1_disp), Point(x2_disp, y2_disp))
+        box.setOutline(box_color)
+        box.setFill(box_color)
+        
+        box.setText(f'{turnColor}')
+        box.setTextSize(int(self.column_width/10))
         box.setTextColor(text_color)
 
         return box
@@ -72,10 +98,20 @@ class Column():
         self.num_turns_display.undraw()
         self.num_turns_display = box
     
-
+    def update_turn_display(self, numTurns):
+        turnColor = 'white'
+        if numTurns % 2 == 0:
+            turnColor = 'black'
+        
+        box = self.__gen_turn_display(turnColor)       
+        box.draw(self.win)
+        
+        self.turn_display.undraw()
+        self.num_turns_display = box
     def drawComponents(self):
         self.column_block.draw(self.win)
         self.forefeit_button.draw(self.win)
+        self.turn_display.draw(self.win)
         self.num_turns_display.draw(self.win)
         
     # get

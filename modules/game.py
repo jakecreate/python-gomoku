@@ -9,12 +9,13 @@ class Round():
         # set size of window
         self.winSize = winSize
         # set difficulty for distribution
-        mode = {'easy' : 20, 'medium' : 10, 'hard' : 8, 'test' : 2}
+        mode = {'easy' : 20, 'medium' : 10, 'hard' : 8, 'test' : 16}
         self.distribution = mode[difficulty.lower()]
         self.spacing = self.winSize/self.distribution
 
         # related to lines
         self.lineList = self.__generateLines()
+        self.lineLabel = self.__generateLineLabels()
         self.slotList = self.__generateSlots()
 
         # conditions of the round
@@ -31,6 +32,7 @@ class Round():
         li = []
 
         for x in range(self.distribution - 1):
+
             # get horizontal line end points
             hPoint1 = Point(self.spacing, self.spacing * (x + 1))
             hPoint2 = Point(self.winSize - self.spacing, self.spacing * (x + 1))
@@ -53,6 +55,19 @@ class Round():
         
         return li
     
+    def __generateLineLabels(self):
+        li = []
+        for x in range(self.distribution - 1):
+            letter = chr(ord('A') + x)
+
+            txt = Text(Point(self.spacing * (x + 1), self.spacing/2), letter)
+            txt.setSize(int(self.spacing/4))
+            txt.setTextColor(color_rgb(156,116,43))
+
+            li.append(txt)
+        
+        return li
+
     
     def __generateSlots(self):
         li = []
@@ -72,6 +87,10 @@ class Round():
         for x in range((self.distribution - 1)*2):
             self.lineList[x].draw(self.win)
 
+    def drawLetters(self):
+        for x in range(self.distribution - 1):
+            self.lineLabel[x].draw(self.win)
+    
     # find closet slot to add
     def findSlot(self, xCord, yCord):  
         column = 0
@@ -120,7 +139,7 @@ class Round():
 
     # end round
     def hasFiveConnected(self, slot):
-
+        
         def changeColor(listOfSlots):
             if slot.getId() == 1:
                 color = "white"
@@ -137,19 +156,23 @@ class Round():
         numConnected = 0
         slotsConnected = []
         row = self.slotList[self.currentRowIndex]
-        
-        # count right horizontal
-        for i in range(1, 5):
-            if self.currentColumnIndex + i < len(row):
-                nextSlot = row[self.currentColumnIndex + i]
+        direct = 1
 
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
+        # horizontal
+        for j in range(2):
+            for i in range(1, 6):
+                if self.currentColumnIndex + i*direct < len(row):
+                    nextSlot = row[self.currentColumnIndex + i*direct]
+
+                    if nextSlot.getId() == slot.getId():
+                        slotsConnected.append(nextSlot)
+                        numConnected+=1
+                    else:
+                        break
                 else:
                     break
-            else:
-                break
+            
+            direct*=-1
         
         # check if connected
         if numConnected == 4:
@@ -157,42 +180,26 @@ class Round():
             changeColor(slotsConnected)
             return True
         
-        # count left horizontal
-        for i in range(1, 5):
-            if self.currentColumnIndex - i >= 0:
-                nextSlot = row[self.currentColumnIndex - i]
-
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
-                else:
-                    break
-            else:
-                break
-        
-        # check if connected
-        if numConnected == 4:
-            slotsConnected.append(slot)
-            changeColor(slotsConnected)
-            return True
-
         # reset
         numConnected = 0
         slotsConnected = []
-        
-        # count up vertical
-        for i in range(1, 5):
-            if self.currentRowIndex - i >= 0:
-                row = self.slotList[self.currentRowIndex - i]
-                nextSlot = row[self.currentColumnIndex]
+    
+        # vertical
+        for j in range(2):
+            for i in range(1, 6):
+                if self.currentRowIndex - i*direct >= 0 or self.currentRowIndex + i*direct < len(self.slotList):
+                    row = self.slotList[self.currentRowIndex - i*direct]
+                    nextSlot = row[self.currentColumnIndex]
 
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
+                    if nextSlot.getId() == slot.getId():
+                        slotsConnected.append(nextSlot)
+                        numConnected+=1
+                    else:
+                        break
                 else:
                     break
-            else:
-                break
+            
+            direct*=-1
         
        # check if connected
         if numConnected == 4:
@@ -200,107 +207,61 @@ class Round():
             changeColor(slotsConnected)
             return True
         
-        # count down vertical
-        for i in range(1, 5):
-            if self.currentRowIndex + i < len(self.slotList):
-                row = self.slotList[self.currentRowIndex + i]
-                nextSlot = row[self.currentColumnIndex]
-        
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
-                else:
-                    break
-            else:
-                break
-        
-        # check if connected
-        if numConnected == 4:
-            slotsConnected.append(slot)
-            changeColor(slotsConnected)
-            return True
-
         # reset 
         numConnected = 0
         slotsConnected = []
 
-        # count diagonal right up
-        for i in range(1, 5):
-            if self.currentColumnIndex + i < len(row) and self.currentRowIndex - i >= 0:
-                row = self.slotList[self.currentRowIndex - i]
-                nextSlot = row[self.currentColumnIndex + i]
-        
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
+        # count diagonal right
+        for j in range(2):
+            for i in range(1, 6):
+                # check if pass top right corner
+                if self.currentColumnIndex + i*direct < len(row) and self.currentRowIndex - i*direct >= 0:
+                    # check if index becomes greater than 
+                    if self.currentColumnIndex - i*direct >= 0 and self.currentRowIndex + i*direct < len(self.slotList):
+                        row = self.slotList[self.currentRowIndex - i*direct]
+                        nextSlot = row[self.currentColumnIndex + i*direct]
+                
+                        if nextSlot.getId() == slot.getId():
+                            slotsConnected.append(nextSlot)
+                            numConnected+=1
+                        else:
+                            break
+                    else:
+                        break
                 else:
                     break
-            else:
-                break
+            
+            direct*=-1
         
         # check if connected
         if numConnected == 4:
             slotsConnected.append(slot)
             changeColor(slotsConnected)
             return True
-    
-        # count diagonal down left
-        for i in range(1, 5):
-            if self.currentColumnIndex - i >= 0 and self.currentRowIndex + i < len(self.slotList):
-                row = self.slotList[self.currentRowIndex + i]
-                nextSlot = row[self.currentColumnIndex - i]
-        
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
-                else:
-                    break
-            else:
-                break
-        
-        # check if connected
-        if numConnected == 4:
-            slotsConnected.append(slot)
-            changeColor(slotsConnected)
-            return True
-        
+
         # reset
         numConnected = 0
         slotsConnected = []
         
-        # count diagonal left up
-        for i in range(1, 5):
-            if self.currentColumnIndex - i >= 0 and self.currentRowIndex - i >= 0:
-                row = self.slotList[self.currentRowIndex - i]
-                nextSlot = row[self.currentColumnIndex - i]
-        
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
+        # count diagonal left
+        for j in range(2):
+            for i in range(1, 5):
+                if self.currentColumnIndex - i*direct >= 0 and self.currentRowIndex - i*direct >= 0:
+                    if self.currentColumnIndex + i*direct < len(row) and self.currentRowIndex + i*direct < len(self.slotList):
+                        row = self.slotList[self.currentRowIndex - i*direct]
+                        nextSlot = row[self.currentColumnIndex - i*direct]
+                
+                        if nextSlot.getId() == slot.getId():
+                            slotsConnected.append(nextSlot)
+                            numConnected+=1
+                        else:
+                            break
+                    else:
+                        break
                 else:
                     break
-            else:
-                break
-        
-        # check if connected
-        if numConnected == 4:
-            slotsConnected.append(slot)
-            changeColor(slotsConnected)
-            return True
-        
-        # count diagonal down right
-        for i in range(1, 5):
-            if self.currentColumnIndex + i < len(row) and self.currentRowIndex + i < len(self.slotList):
-                row = self.slotList[self.currentRowIndex + i]
-                nextSlot = row[self.currentColumnIndex + i]
-        
-                if nextSlot.getId() == slot.getId() and numConnected < 4:
-                    slotsConnected.append(nextSlot)
-                    numConnected+=1
-                else:
-                    break
-            else:
-                break
+            
+            direct*=-1
         
         # check if connected
         if numConnected == 4:
@@ -332,7 +293,6 @@ class Slot():
         self.x = x
         self.y = y
         self.slotOccupied = False
-
         # id is a single interger : 1 & 2 | 0 means there is no ID = no occupant of the slot
         self.occupantId = 0
         self.dot = None

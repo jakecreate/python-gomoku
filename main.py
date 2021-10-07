@@ -3,8 +3,8 @@ from modules.game import *
 from modules.gui import *
 
 # conditions
-difficulty = 'easy' # options for difficulty input = "easy"(19x19) - "medium"(9x9) - "hard"(7x7) [Capitalization does not matter] 
-winSize = 750 # window -- size range from 250 to 900 --
+difficulty = 'test' # options for difficulty input = "easy"(19x19) - "medium"(9x9) - "hard"(7x7) [Capitalization does not matter] 
+winSize = 750# window -- size range from 250 to 900 --
 gui_width = winSize/5
 window_color = color_rgb(247,215,157)
 column_color =color_rgb(58,61,67) 
@@ -26,11 +26,16 @@ gui.drawComponents()
 # game setup
 round = Round(win, winSize, difficulty)
 round.drawLines()
+round.drawLetters()
 dotRadius = round.getSpacing()/3
 players = [player1, player2]
 
 # round
 while round.isRunning():
+
+    # gui update 2
+    gui.update_turn_display(round.getTurns())
+    
     # find player
     player = players[round.getTurns() % 2]
     print(f"[Turn#{round.getTurns() + 1}] Player#{players.index(player) + 1}'s turn! [{player.getColor()}]")
@@ -58,18 +63,23 @@ while round.isRunning():
             dot.draw(win)
             
             round.nextTurn()
+
+            # gui update 1
             gui.update_num_turns_display(round.getTurns())
+            
         # has five connected
         if round.hasFiveConnected(slot):
             print(f"Player#{player.getId()} Wins! Click anywhere to END")
             round.end()
+
         # if full
         if round.isFull():
             round.end()
+
     else:
         # have a set of buttons
         if gui.getForefitButton().ifPressed(mouse):
-            break
+            round.end()
         # if conds of buttons
         pass
 
