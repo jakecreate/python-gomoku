@@ -26,33 +26,37 @@ gui.drawComponents()
 # game setup
 round = Round(win, winSize, difficulty)
 round.drawLines()
-round.drawLetters()
+round.drawLabels()
 dotRadius = round.getSpacing()/3
 players = [player1, player2]
 
+#draw text lines
+
+# for x in range(4):
+#     line = Line(Point(0,(x + 1)*winSize/12), Point(win.getWidth(),(x + 1)*winSize/12))
+#     line.setFill('white')
+#     line.draw(win)
 # round
 while round.isRunning():
-
-    # gui update 2
-    gui.update_turn_display(round.getTurns())
-    
     # find player
     player = players[round.getTurns() % 2]
-    print(f"[Turn#{round.getTurns() + 1}] Player#{players.index(player) + 1}'s turn! [{player.getColor()}]")
-    print()
+    # print(f"[Turn#{round.getTurns() + 1}] Player#{players.index(player) + 1}'s turn! [{player.getColor()}]")
     # get mouse coords
     mouse = win.getMouse()
     xCord = mouse.getX()
     yCord = mouse.getY()
     # check if mouse in on board
     if xCord < winSize:
+
         # find slot
         slot = round.findSlot(xCord, yCord)
-
+        print(slot.getUniq())
         if slot.isOccupied():
+
             print("occupied")
-            
+
         else:
+
             # draw dot on a specific slot
             dot = Circle(Point(slot.getX(), slot.getY()), dotRadius) 
             dot.setOutline(player.getColor())
@@ -66,10 +70,10 @@ while round.isRunning():
 
             # gui update 1
             gui.update_num_turns_display(round.getTurns())
+            gui.update_turn_display(round.getTurns())
             
         # has five connected
         if round.hasFiveConnected(slot):
-            print(f"Player#{player.getId()} Wins! Click anywhere to END")
             round.end()
 
         # if full

@@ -9,8 +9,9 @@ class Column():
         self.column_color = column_color
 
         self.column_block = self.__gen_column_block()
-        self.num_turns_display = self.__gen_num_turns_display(0)
+        self.num_turns_display = self.__gen_num_moves_display(0)
         self.forefeit_button = self.__gen_forefeit_button()
+        self.turnText = self.__gen_turn_text()
         self.turn_display = self.__gen_turn_display("black")
         
 
@@ -41,7 +42,7 @@ class Column():
         return column_block
    
 
-    def __gen_num_turns_display(self, numTurns):
+    def __gen_num_moves_display(self, numTurns):
         
         box_color = color_rgb(41, 44, 48)
         text_color = 'white'
@@ -64,6 +65,18 @@ class Column():
 
         return box
     
+    def __gen_turn_text(self):
+        spacing = self.column_width/16/2
+
+        x_disp = (self.win.getWidth() - self.column_width) + self.column_width/4 +  spacing
+        y_disp = self.win.getHeight()/12 + self.win.getHeight()/24
+        
+        text = Text(Point(x_disp, y_disp), 'Turn:')
+        text.setSize(int(self.column_width/9))
+        text.setTextColor('white')
+
+        return text
+
     def __gen_turn_display(self, turnColor):
         
         box_color = turnColor
@@ -75,10 +88,10 @@ class Column():
         
 
         x1_disp = self.win.getWidth() - self.column_width/2 + spacing
-        y1_disp = self.win.getHeight()/12
+        y1_disp = self.win.getHeight()/12 + spacing
 
         x2_disp = self.win.getWidth() - spacing
-        y2_disp = (self.win.getHeight()/12)*2 - spacing*2
+        y2_disp = (self.win.getHeight()/12)*2 - spacing
 
         box = TextBox(Point(x1_disp, y1_disp), Point(x2_disp, y2_disp))
         box.setOutline(box_color)
@@ -89,15 +102,16 @@ class Column():
         box.setTextColor(text_color)
 
         return box
-
-    # actions
+    
+    # update
     def update_num_turns_display(self, numTurns):
-        box = self.__gen_num_turns_display(numTurns)        
+        box = self.__gen_num_moves_display(numTurns)        
         box.draw(self.win)
         
         self.num_turns_display.undraw()
         self.num_turns_display = box
     
+
     def update_turn_display(self, numTurns):
         turnColor = 'white'
         if numTurns % 2 == 0:
@@ -108,11 +122,15 @@ class Column():
         
         self.turn_display.undraw()
         self.num_turns_display = box
+    
+
+    # draw
     def drawComponents(self):
         self.column_block.draw(self.win)
         self.forefeit_button.draw(self.win)
         self.turn_display.draw(self.win)
         self.num_turns_display.draw(self.win)
+        self.turnText.draw(self.win)
         
     # get
     def getForefitButton(self):
@@ -154,8 +172,10 @@ class TextBox():
     def setText(self, strLine):
         self.text = Text(self.centerPoint, strLine)
     
+
     def setTextSize(self, size):
         self.text.setSize(size)
+
 
     def setTextColor(self, colors):
         self.text.setTextColor(colors)
@@ -167,6 +187,7 @@ class TextBox():
 
     def setFill(self, colors):
         self.rec.setFill(colors)
+
 
     def getWidth(self):
         return self.leftX - self.rightX

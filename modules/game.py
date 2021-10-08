@@ -15,7 +15,8 @@ class Round():
 
         # related to lines
         self.lineList = self.__generateLines()
-        self.lineLabel = self.__generateLineLabels()
+        self.labelLetters = self.__generateLineLabels()
+        self.labelNumbers = self.__generateNumberLabels()
         self.slotList = self.__generateSlots()
 
         # conditions of the round
@@ -57,14 +58,28 @@ class Round():
     
     def __generateLineLabels(self):
         li = []
-        for x in range(self.distribution - 1):
-            letter = chr(ord('A') + x)
+        for x in range((self.distribution - 1)):
 
+
+            letter = chr(ord('A') + x)
             txt = Text(Point(self.spacing * (x + 1), self.spacing/2), letter)
             txt.setSize(int(self.spacing/4))
             txt.setTextColor(color_rgb(156,116,43))
-
+            
             li.append(txt)
+         
+        
+        return li
+
+    def __generateNumberLabels(self):
+        li = []
+        for x in range((self.distribution - 1)):
+
+            number = Text(Point(self.spacing/2, self.spacing * (x + 1)),x + 1)
+            number.setSize(int(self.spacing/4))
+            number.setTextColor(color_rgb(156,116,43))
+            
+            li.append(number)
         
         return li
 
@@ -75,7 +90,8 @@ class Round():
         for i in range(self.distribution - 1):
             row = []
             for j in range(self.distribution - 1):
-                x = Slot(self.spacing*(j + 1), self.spacing*(i + 1))
+                uniq = f'{self.labelLetters[j].getText()}{self.labelNumbers[i].getText()}'
+                x = Slot(self.spacing*(j + 1), self.spacing*(i + 1), uniq)
                 row.append(x)
 
             li.append(row)
@@ -87,9 +103,10 @@ class Round():
         for x in range((self.distribution - 1)*2):
             self.lineList[x].draw(self.win)
 
-    def drawLetters(self):
+    def drawLabels(self):
         for x in range(self.distribution - 1):
-            self.lineLabel[x].draw(self.win)
+            self.labelNumbers[x].draw(self.win)
+            self.labelLetters[x].draw(self.win)
     
     # find closet slot to add
     def findSlot(self, xCord, yCord):  
@@ -141,7 +158,7 @@ class Round():
     def hasFiveConnected(self, slot):
         
         def changeColor(listOfSlots):
-            if slot.getId() == 1:
+            if slot.getOccupantId() == 1:
                 color = "white"
             else:
                 color = "black"
@@ -161,15 +178,15 @@ class Round():
         # horizontal
         for j in range(2):
             for i in range(1, 6):
-                if self.currentColumnIndex + i*direct < len(row):
+                try:
                     nextSlot = row[self.currentColumnIndex + i*direct]
 
-                    if nextSlot.getId() == slot.getId():
+                    if nextSlot.getOccupantId() == slot.getOccupantId():
                         slotsConnected.append(nextSlot)
                         numConnected+=1
                     else:
                         break
-                else:
+                except:
                     break
             
             direct*=-1
@@ -187,16 +204,16 @@ class Round():
         # vertical
         for j in range(2):
             for i in range(1, 6):
-                if self.currentRowIndex - i*direct >= 0 or self.currentRowIndex + i*direct < len(self.slotList):
+                try:
                     row = self.slotList[self.currentRowIndex - i*direct]
                     nextSlot = row[self.currentColumnIndex]
 
-                    if nextSlot.getId() == slot.getId():
+                    if nextSlot.getOccupantId() == slot.getOccupantId():
                         slotsConnected.append(nextSlot)
                         numConnected+=1
                     else:
                         break
-                else:
+                except:
                     break
             
             direct*=-1
@@ -214,21 +231,16 @@ class Round():
         # count diagonal right
         for j in range(2):
             for i in range(1, 6):
-                # check if pass top right corner
-                if self.currentColumnIndex + i*direct < len(row) and self.currentRowIndex - i*direct >= 0:
-                    # check if index becomes greater than 
-                    if self.currentColumnIndex - i*direct >= 0 and self.currentRowIndex + i*direct < len(self.slotList):
-                        row = self.slotList[self.currentRowIndex - i*direct]
-                        nextSlot = row[self.currentColumnIndex + i*direct]
-                
-                        if nextSlot.getId() == slot.getId():
-                            slotsConnected.append(nextSlot)
-                            numConnected+=1
-                        else:
-                            break
+                try:
+                    row = self.slotList[self.currentRowIndex - i*direct]
+                    nextSlot = row[self.currentColumnIndex + i*direct]
+            
+                    if nextSlot.getOccupantId() == slot.getOccupantId():
+                        slotsConnected.append(nextSlot)
+                        numConnected+=1
                     else:
                         break
-                else:
+                except:
                     break
             
             direct*=-1
@@ -246,19 +258,16 @@ class Round():
         # count diagonal left
         for j in range(2):
             for i in range(1, 5):
-                if self.currentColumnIndex - i*direct >= 0 and self.currentRowIndex - i*direct >= 0:
-                    if self.currentColumnIndex + i*direct < len(row) and self.currentRowIndex + i*direct < len(self.slotList):
-                        row = self.slotList[self.currentRowIndex - i*direct]
-                        nextSlot = row[self.currentColumnIndex - i*direct]
-                
-                        if nextSlot.getId() == slot.getId():
-                            slotsConnected.append(nextSlot)
-                            numConnected+=1
-                        else:
-                            break
+                try:
+                    row = self.slotList[self.currentRowIndex - i*direct]
+                    nextSlot = row[self.currentColumnIndex - i*direct]
+            
+                    if nextSlot.getOccupantId() == slot.getOccupantId():
+                        slotsConnected.append(nextSlot)
+                        numConnected+=1
                     else:
                         break
-                else:
+                except:
                     break
             
             direct*=-1
@@ -284,12 +293,12 @@ class Player():
     def getColor(self): return self.color
 
 
-    def getId(self): return self.playerId
+    def getOccupantId(self): return self.playerId
 
 
 class Slot():
 
-    def __init__(self, x : int, y : int):
+    def __init__(self, x : int, y : int, id : str):
         self.x = x
         self.y = y
         self.slotOccupied = False
@@ -297,9 +306,11 @@ class Slot():
         self.occupantId = 0
         self.dot = None
 
+        self.id = id
+
 
     def occupy(self, player): 
-        self.occupantId = player.getId()
+        self.occupantId = player.getOccupantId()
         self.slotOccupied = True
 
 
@@ -309,11 +320,13 @@ class Slot():
     def getY(self): return self.y
 
 
-    def getId(self): return self.occupantId
+    def getOccupantId(self): return self.occupantId
 
     
     def getDot(self): return self.dot
-    
+
+
+    def getUniq(self): return self.id
 
     def isOccupied(self): return self.slotOccupied
 
