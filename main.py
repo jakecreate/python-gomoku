@@ -4,7 +4,7 @@ from modules.gui import *
 
 # conditions
 difficulty = 'test' # options for difficulty input = "easy"(19x19) - "medium"(9x9) - "hard"(7x7) [Capitalization does not matter] 
-winSize = 750# window -- size range from 250 to 900 --
+winSize = 750 # window -- size range from 250 to 900 --
 gui_width = winSize/5
 window_color = color_rgb(247,215,157)
 column_color =color_rgb(58,61,67) 
