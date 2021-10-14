@@ -12,7 +12,7 @@ p1_color = color_rgb(64,62,58) # black
 p2_color = color_rgb(246, 242, 235) # white
 
 # window setup
-win = GraphWin(title='Connect 5', width=winSize + gui_width, height=winSize)
+win = GraphWin(title='Gomoku', width=winSize + gui_width, height=winSize)
 win.setBackground(window_color)   
 
 # players
@@ -32,7 +32,7 @@ players = [player1, player2]
 
 #draw text lines
 
-# for x in range(4):
+# for x in range(8):
 #     line = Line(Point(0,(x + 1)*winSize/12), Point(win.getWidth(),(x + 1)*winSize/12))
 #     line.setFill('white')
 #     line.draw(win)
@@ -71,6 +71,8 @@ while round.isRunning():
             # gui update 1
             gui.update_num_turns_display(round.getTurns())
             gui.update_turn_display(round.getTurns())
+            gui.update_uniq_display(slot.getUniq())
+            # gui.update_
             
         # has five connected
         if round.hasFiveConnected(slot):
