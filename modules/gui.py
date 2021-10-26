@@ -53,6 +53,7 @@ class Column():
 
         return box
     
+
     def __gen_turn_text(self):
         spacing = self.column_width/16
         box_color = color_rgb(41, 44, 48)
@@ -71,6 +72,7 @@ class Column():
         box.setTextSize(int(self.column_width/9))
         box.setTextColor('white')
         return box
+
 
     def __gen_turn_display(self, turnColor):
         
@@ -97,7 +99,8 @@ class Column():
         box.setTextColor(text_color)
 
         return box
-    
+
+
     def __gen_previous_move_text(self):
         spacing = self.column_width/16
         color = color_rgb(41, 44, 48)
@@ -116,6 +119,7 @@ class Column():
         box.setTextColor('white')
 
         return box
+
 
     def __gen_previous_move_display(self, uniq):
         spacing = self.column_width/16
@@ -155,7 +159,7 @@ class Column():
 
         return button
 
-    
+
     # update
     def update_num_turns_display(self, numTurns):
         box = self.__gen_num_moves_display(numTurns)        
