@@ -2,10 +2,10 @@ from modules.graphics import *
 
 class Round():
 
-    def __init__(self, window, winSize, difficulty):
+    def __init__(self, gui, window, winSize, difficulty):
         # get window object
         self.win = window
-
+        self.gui = gui
         # set size of window
         self.winSize = winSize
         # set difficulty for distribution
@@ -98,10 +98,18 @@ class Round():
         
         return li
     
-    # draw lines
+    # draw
+    def drawComponents(self):
+        self.drawLines()
+        self.drawLabels()
+
+    def drawBoard(self):
+        self.board.draw(self.win)
+
     def drawLines(self):   
         for x in range((self.distribution - 1)*2):
             self.lineList[x].draw(self.win)
+
 
     def drawLabels(self):
         for x in range(self.distribution - 1):
@@ -283,6 +291,36 @@ class Round():
     def end(self): self.running = False
     
 
+    def restart(self):
+        # self.gui.restart()
+        for i in self.slotList:
+            for j in i:
+                if j.getOccupantId() != 0:
+                    j.getDot().undraw()
+                    j.resetOccupant()
+        
+        # conditions of the round
+        self.numTurns = 0
+        self.gui.setTime(0, 5*60)
+        self.gui.setTime(1, 5*60)
+        # extra cond
+        self.currentRowIndex = 0
+        self.currentColumnIndex = 0
+        self.currentPlayerId = 0
+
+
+        # display change
+        self.gui.update_timer_display(0)
+        self.gui.update_timer_display(1)
+        self.gui.update_num_turns_display(0)
+        self.gui.update_turn_display(0)
+        self.gui.update_uniq_display('-----')
+
+
+        self.running = True
+
+        
+
 class Player():
 
     def __init__(self, playerId, color):
@@ -319,7 +357,9 @@ class Slot():
 
     def getY(self): return self.y
 
-
+    def resetOccupant(self):
+        self.occupantId = 0
+        self.slotOccupied = False
     def getOccupantId(self): return self.occupantId
 
     

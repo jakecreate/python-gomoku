@@ -1,26 +1,41 @@
 from modules.graphics import *
 from modules.game import *
 import time
+import math
+
+def get_statement(minutes, seconds):
+            if seconds <= 9:               
+                return f"{minutes}:0{seconds}"
+            else:
+                return f"{minutes}:{seconds}"
+
 class Column():
 
-    def __init__(self, winObj, column_width, column_color):
+
+    def __init__(self, winObj, column_width, column_color, amountTime):
         self.win = winObj
         self.column_width = column_width
         self.column_color = column_color
+        self.running = True
 
         self.column_block = self.__gen_column_block()
 
         self.num_turns_display = self.__gen_num_moves_display(0)
 
-        
         self.turnText = self.__gen_turn_text()
         self.turn_display = self.__gen_turn_display("black")
 
         self.previous_move_text = self.__gen_previous_move_text()
         self.previous_move_display = self.__gen_previous_move_display('XX')
 
-        self.forefeit_button = self.__gen_forefeit_button()
+        self.black_timer_display = self.__gen_timer_display(get_statement(int(amountTime/60), amountTime%60), 1)
+        self.white_timer_display = self.__gen_timer_display(get_statement(int(amountTime/60), amountTime%60), 2)
+        self.black_time = amountTime
+        self.white_time = amountTime
 
+        self.forefeit_button = self.__gen_forefeit_button()
+        self.restart_button = self.__gen_restart_button()       
+        
     # generate
     def __gen_column_block(self):
         column_block = Rectangle(Point(self.win.getHeight(), 0), Point(self.win.getWidth(), self.win.getHeight()))
@@ -139,7 +154,8 @@ class Column():
         box.setTextColor('white')
 
         return box
-
+# 14-15 , 56(the blue lake, human being), chapter 18 153-154(beginning, heart), 
+# chapter 22 198(great god, dear victor) 
 
     def __gen_forefeit_button(self):
         color = color_rgb(231, 108, 108)
@@ -160,6 +176,83 @@ class Column():
         return button
 
 
+    def __gen_restart_button(self):
+        color = color_rgb(154, 205, 50)
+        spacing = self.column_width/4
+
+        x1_disp = self.win.getWidth() - self.column_width + spacing
+        y1_disp = self.win.getHeight() - 2*self.win.getHeight()/5 + spacing
+        x2_disp = self.win.getWidth() - spacing
+        y2_disp = self.win.getHeight() - self.win.getHeight()/5 - spacing
+        
+        button = Button(Point(x1_disp, y1_disp), Point(x2_disp, y2_disp))
+        button.setOutline(color)
+        button.setFill(color)
+        button.setText('REDO')
+        button.setTextSize(int(self.column_width/10))
+        button.setTextColor('white')
+
+        return button
+
+
+    def __gen_timer_display(self, time_statement, playerId):
+
+        box_color = None
+        text_color = None
+        i_disp = 0
+        if playerId == 1:
+            box_color = 'black'
+            text_color = 'white'
+            i_disp = 4
+        else:
+            box_color = 'white'
+            text_color = 'black'
+            i_disp = 5
+        
+        spacing = self.column_width/16
+
+        x1_disp = self.win.getWidth() - self.column_width + spacing
+        y1_disp = (self.win.getHeight()/12)*i_disp + spacing
+
+        x2_disp = self.win.getWidth() - spacing
+        y2_disp = (self.win.getHeight()/12)*(i_disp + 1) - spacing
+
+        button = Button(Point(x1_disp, y1_disp), Point(x2_disp, y2_disp))
+        button.setOutline(box_color)
+        button.setFill(box_color)
+
+        button.setText(f"{time_statement}")
+        button.setTextSize(int(self.column_width/7))
+        button.setTextColor(text_color)
+        
+
+        return button
+    
+    
+    def update_timer_display(self, playerId):
+        
+        min = None
+        sec = None
+        if playerId == 1:
+            min = int(self.black_time/60)
+            sec = self.black_time%60
+        else: 
+            min = int(self.white_time/60)
+            sec = self.white_time%60
+            
+
+        box = self.__gen_timer_display(get_statement(min, sec), playerId)        
+        box.draw(self.win)
+
+        if playerId == 1:
+            self.black_timer_display.undraw()
+            self.black_timer_display = box
+        else:
+            self.white_timer_display.undraw()
+            self.white_timer_display = box
+        
+        print(f"W:{self.black_time} B:{self.white_time}")
+ 
     # update
     def update_num_turns_display(self, numTurns):
         box = self.__gen_num_moves_display(numTurns)        
@@ -179,18 +272,19 @@ class Column():
         
         self.turn_display.undraw()
         self.num_turns_display = box
-    
+
+
     def update_uniq_display(self, uniq):
         box = self.__gen_previous_move_display(uniq)        
         box.draw(self.win)
         
         self.previous_move_display.undraw()
         self.previous_move_display = box
+
     # draw
     def drawComponents(self):
         self.column_block.draw(self.win)
         
-
         self.num_turns_display.draw(self.win)
         self.turnText.draw(self.win)
         self.turn_display.draw(self.win)
@@ -198,13 +292,40 @@ class Column():
         self.previous_move_text.draw(self.win)
         self.previous_move_display.draw(self.win)
 
+        self.black_timer_display.draw(self.win)
+        self.white_timer_display.draw(self.win)
+
         self.forefeit_button.draw(self.win)
-        
+        self.restart_button.draw(self.win)
+
     # get
     def getForefitButton(self):
         return self.forefeit_button
- 
+
+
+    def getRestartButton(self):
+        return self.restart_button
+   
+   
+    def getTime(self, id):
+        if id == 1:
+            return self.black_time
+        else:
+            return self.white_time
     
+    def setTime(self, id, sTime):
+        if id == 1:
+            self.black_time = sTime
+        else:
+            self.white_time = sTime
+    # cond
+    def isRunning(self):
+        return self.running
+
+
+    def end(self):
+        self.running = False
+
 
 class TextBox():
 
@@ -283,7 +404,6 @@ class Button(TextBox):
             return True
         else:
             return False
-
 
    
     
