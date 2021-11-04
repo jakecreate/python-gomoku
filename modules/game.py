@@ -59,8 +59,6 @@ class Round():
     def __generateLineLabels(self):
         li = []
         for x in range((self.distribution - 1)):
-
-
             letter = chr(ord('A') + x)
             txt = Text(Point(self.spacing * (x + 1), self.spacing/2), letter)
             txt.setSize(int(self.spacing/4))
@@ -74,7 +72,6 @@ class Round():
     def __generateNumberLabels(self):
         li = []
         for x in range((self.distribution - 1)):
-
             number = Text(Point(self.spacing/2, self.spacing * (x + 1)),x + 1)
             number.setSize(int(self.spacing/4))
             number.setTextColor(color_rgb(156,116,43))
@@ -120,7 +117,6 @@ class Round():
     def findSlot(self, xCord, yCord):  
         column = 0
         for i in self.slotList[0]:
-            
             if abs(i.getX() - xCord) < abs(self.slotList[0][column].getX() - xCord):
                 column = self.slotList[0].index(i)
         
@@ -152,7 +148,6 @@ class Round():
         
         if self.numTurns == len(self.slotList)**2:
             return True
-            
         else:
             return False
     
@@ -162,6 +157,19 @@ class Round():
 
     def getTurns(self): return self.numTurns
 
+    def highlightSlot(self, playerId):
+            if playerId == 1:
+                color = "black"
+            else:
+                color = "white"
+
+            for i in self.slotList:
+                for j in i:
+                    if j.getDot() is not None:
+                        dot = j.getDot()
+                        dot.undraw()
+                        dot.setOutline(color)
+                        dot.draw(self.win)
     # end round
     def hasFiveConnected(self, slot):
         
@@ -291,7 +299,7 @@ class Round():
     def end(self): self.running = False
     
 
-    def restart(self):
+    def restart(self, amountTime):
         # self.gui.restart()
         for i in self.slotList:
             for j in i:
@@ -301,8 +309,8 @@ class Round():
         
         # conditions of the round
         self.numTurns = 0
-        self.gui.setTime(0, 5*60)
-        self.gui.setTime(1, 5*60)
+        self.gui.setTime(0, amountTime)
+        self.gui.setTime(1, amountTime)
         # extra cond
         self.currentRowIndex = 0
         self.currentColumnIndex = 0
@@ -318,8 +326,7 @@ class Round():
 
 
         self.running = True
-
-        
+ 
 
 class Player():
 
