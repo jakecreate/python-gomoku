@@ -292,7 +292,6 @@ class Column():
         self.white_timer_display.draw(self.win)
 
         self.forefeit_button.draw(self.win)
-        self.restart_button.draw(self.win)
 
     # get
     def getForefitButton(self):
@@ -391,27 +390,42 @@ class Button(TextBox):
 
     def __init__(self, p1, p2):
         super().__init__(p1, p2)
-
+        self.ifDrawn = False
 
     def ifPressed(self, p):
-        
-        insideX = False
-        insideY = False
+        if self.ifDrawn is True:
+            insideX = False
+            insideY = False
 
-        if p.getX() > self.leftX and p.getX() < self.rightX:
-            insideX = True
-        
-        if p.getY() > self.topY and p.getY() < self.botY:
-            insideY = True
+            if p.getX() > self.leftX and p.getX() < self.rightX:
+                insideX = True
+            
+            if p.getY() > self.topY and p.getY() < self.botY:
+                insideY = True
 
-        if insideX and insideY:
-            return True
+            if insideX and insideY:
+                return True
+            else:
+                return False
+
+    def undraw(self):
+        if self.text == None:
+            self.rec.undraw()
+            
         else:
-            return False
+            self.rec.undraw()
+            self.text.undraw()
+        
+        self.ifDrawn = False
+    
+    def draw(self, window):
+        if self.text is not None:
+            self.rec.draw(window)
+            self.text.draw(window)
+        else:
+            self.rec.draw(window)
 
-
-
-   
+        self.ifDrawn = True
     
 
 

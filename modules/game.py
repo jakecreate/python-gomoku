@@ -296,7 +296,9 @@ class Round():
         
         return False
 
-    def end(self): self.running = False
+    def end(self):
+        self.running = False
+        self.gui.getRestartButton().draw(self.win)
     
 
     def restart(self, amountTime):

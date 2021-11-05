@@ -98,7 +98,8 @@ while round.isRunning() or gui.isRunning():
                 round.end()
                 gui.end()
             
-            if gui.getRestartButton().ifPressed(mouse):
+            if gui.getRestartButton() is not None and gui.getRestartButton().ifPressed(mouse):
+                gui.getRestartButton().undraw()
                 round.restart(amountTime)
                 player = None
             
