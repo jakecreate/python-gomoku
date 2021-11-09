@@ -8,4 +8,5 @@ Players alternate turns placing a stone of their color on an empty intersection.
 
 <img src="https://www.linkpicture.com/q/Screen-Shot-2021-11-05-at-9.04.00-AM.png" alt="a picture of diagonal line of 5 beads" width="150" height="150"> <img src="https://www.linkpicture.com/q/Screen-Shot-2021-11-05-at-9.19.32-AM.png" alt="a picture of diagonal line of 5 beads" width="150" height="150"> <img src="https://www.linkpicture.com/q/Screen-Shot-2021-11-05-at-9.24.50-AM.png" alt="a picture of diagonal line of 5 beads" width="150" height="150"> <img src="https://www.linkpicture.com/q/Screen-Shot-2021-11-05-at-9.31.21-AM.png" alt="a picture of diagonal line of 5 beads" width="150" height="150">
 
+Run the *main.py* file to launch the game.
 Once the winner is decided, press the ***QUIT*** button to close the application or the ***REDO*** button to play again
