@@ -29,9 +29,7 @@ class Column():
 
         self.forefeit_button = self.__gen_forefeit_button()
         self.restart_button = self.__gen_restart_button() 
-
-            
-        
+    
     # generate
     def __gen_column_block(self):
         column_block = Rectangle(Point(self.win.getHeight(), 0), Point(self.win.getWidth(), self.win.getHeight()))
@@ -105,7 +103,7 @@ class Column():
         box.setOutline(box_color)
         box.setFill(box_color)
         
-        box.setText(f'{turnColor}')
+        box.setText(str(turnColor))
         box.setTextSize(int(self.column_width/10))
         box.setTextColor(text_color)
 
@@ -217,7 +215,7 @@ class Column():
         button.setOutline(box_color)
         button.setFill(box_color)
 
-        button.setText(f"{time_statement}")
+        button.setText(time_statement)
         button.setTextSize(int(self.column_width/7))
         button.setTextColor(text_color)
         
@@ -247,7 +245,7 @@ class Column():
             self.white_timer_display.undraw()
             self.white_timer_display = box
         
-        print(f"B:{self.black_time} W:{self.white_time}")
+        print("B:" + str(self.black_time) + "W:" + str(self.white_time))
  
     # update
     def update_num_turns_display(self, numTurns):
@@ -310,9 +308,9 @@ class Column():
 
     def get_time_statement(self, minutes, seconds):
             if seconds <= 9:               
-                return f"{minutes}:0{seconds}"
+                return  str(minutes) + ":0" + str(seconds)
             else:
-                return f"{minutes}:{seconds}"
+                return str(minutes) + ":" + str(seconds)
   
     # set
     def setTime(self, id, sTime):
@@ -392,6 +390,7 @@ class Button(TextBox):
         super().__init__(p1, p2)
         self.ifDrawn = False
 
+
     def ifPressed(self, p):
         if self.ifDrawn is True:
             insideX = False
@@ -408,6 +407,7 @@ class Button(TextBox):
             else:
                 return False
 
+
     def undraw(self):
         if self.text == None:
             self.rec.undraw()
@@ -417,6 +417,7 @@ class Button(TextBox):
             self.text.undraw()
         
         self.ifDrawn = False
+    
     
     def draw(self, window):
         if self.text is not None:

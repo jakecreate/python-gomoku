@@ -104,7 +104,7 @@ while round.isRunning() or gui.isRunning():
                 player = None
             
             
-
+ 
     
     #time display / check if 1 second has passed
 

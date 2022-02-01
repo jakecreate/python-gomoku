@@ -87,7 +87,7 @@ class Round():
         for i in range(self.distribution - 1):
             row = []
             for j in range(self.distribution - 1):
-                uniq = f'{self.labelLetters[j].getText()}{self.labelNumbers[i].getText()}'
+                uniq = str(self.labelLetters[j].getText()) + str(self.labelNumbers[i].getText()) + ""
                 x = Slot(self.spacing*(j + 1), self.spacing*(i + 1), uniq)
                 row.append(x)
 
