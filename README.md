@@ -1,6 +1,8 @@
 # Gomoku
 Made in 2021, a personal passion project during high school. Gratitude towards Dr.Neat, a zealous AP Computer Science Teacher
+
 <img src="images/a_01:11:2022.jpeg" alt="intro to programming class + AP CS playing gomoku" width=400> <img src="images/b_01:11:2022.JPG" alt="round 2" width="400">
+
 ## What is Gomoku?
 Gomoku, called "Five in a Row", is an abstract strategy board game. It is traditionally played with Go pieces (black and white stones) on a Go board. It is played using a 15×15 board, while a 19×19 board was standard in the past. Because pieces are typically not moved or removed from the board, Gomoku may also be played as a paper-and-pencil game. The game is known in several countries under different names.
 ![](images/empty.png)
